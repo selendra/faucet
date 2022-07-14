@@ -1,0 +1,35 @@
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate
+} from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import Header from './components/Header';
+import Testnet from './pages/testnet';
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          style: {
+            color: '#FFF',
+            backgroundColor: 'rgba(255, 255, 255, .1)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid hsla(0, 0%, 65%, 0.158)',
+            padding: '8px 16px'
+          }
+        }}
+      />
+      <Header />
+      <Routes>
+        <Route path='/' element={<Navigate to='/testnet' />} />
+        <Route path='/testnet' element={<Testnet />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
