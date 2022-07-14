@@ -38,3 +38,9 @@ code {
   border-radius: 16px;
   padding: 32px;
 }
+
+@media screen and (max-width: 768px) {
+  .my-card { 
+    padding: 16px;
+  }
+}

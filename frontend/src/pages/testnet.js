@@ -3,7 +3,6 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import giving from '../assets/giving.svg'
 import { InformationCircleIcon, UploadIcon } from '@heroicons/react/outline'
 import toast from 'react-hot-toast';
-// import { isValidSubstrateAddress } from '../utils';
 
 export default function Testnet() {
   const [address, setAddress] = useState('');
@@ -21,7 +20,6 @@ export default function Testnet() {
   const handleSubmit = async() => {
     try {
       if(!address) return toast.error('invalid address!');
-      // if(!isValidSubstrateAddress(address)) return toast.error('invalid address!');
   
       const res = await fetch(`${process.env.REACT_APP_API}/claim/testnet`, {
         method: 'POST',
@@ -42,9 +40,9 @@ export default function Testnet() {
   }
 
   return (
-    <div className='w-3/4 mx-auto py-16'>
+    <div className='md:w-3/4 md:mx-auto mx-4 py-16'>
       <div className='my-card shadow-md'>
-        <img src={giving} alt='' className='fixed top-0 right-0' />
+        {/* <img src={giving} alt='' className='fixed top-0 right-0' /> */}
         <h3 className='font-bold text-2xl'>Get Testnet Tokens</h3>
         <p className='font-light my-4 mr-[10%]'>This faucet transfers Testnet Token on Selendra testnets. Confirm details before submitting.</p>
         
@@ -63,7 +61,7 @@ export default function Testnet() {
         />
 
         <button 
-          // disabled={!isVerified} 
+          disabled={!isVerified} 
           onClick={handleSubmit} 
           class="btn btn-primary border-none w-full rounded-full bg-[#03A9F4] hover:bg-[#03A9F4] mt-6"
         >
