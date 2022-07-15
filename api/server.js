@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const claim = require('./routes/claim');
+const errorHandler = require('./middleware/error');
 
 dotenv.config({ path: './config/config.env' });
 connectDB();
@@ -15,6 +16,8 @@ app.use(express.json());
 
 // mount routers
 app.use('/api/claim', claim);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
