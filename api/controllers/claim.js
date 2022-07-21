@@ -27,7 +27,7 @@ exports.claimTestnet = async(req, res) => {
     const available = !isLessThan24Hour(date);
     
     if(available) {
-      const trx = await SubmitTrx({testnet, destination: req.body.address});
+      const trx = await SubmitTrx({testnet: true, destination: req.body.address});
       if(!trx) return;
 
       await Claimer.findOneAndUpdate(

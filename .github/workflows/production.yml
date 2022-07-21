@@ -1,0 +1,40 @@
+name: Deploy Faucet
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  Faucet:
+    name: Production
+    runs-on: ubuntu-latest
+    environment: 
+      name: Production
+      url: 'https://faucet.selendra.org'
+    steps:
+      - name: Checkout Here
+        uses: actions/checkout@v2
+      - name: Build faucet
+        run: |
+          cd api
+          npm i
+          cd ..
+          cd interface
+          npm ci
+          CI= npm run build 
+      - name: Install ssh key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_KEY }}
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}        
+      - name: Env
+        env:
+          BASH_SECRET: ${{ secrets.BASH_SHELL }}
+        run: |
+          echo "$BASH_SECRET" > ./deploy
+          chmod +x ./deploy
+      - name: Deploying to Production...     
+        run: |
+          ./deploy  
