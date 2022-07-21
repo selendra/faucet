@@ -19,10 +19,10 @@ jobs:
       - name: Build faucet
         run: |
           cd api
-          npm i
+          yarn
           cd ..
           cd interface
-          npm ci
+          yarn
           CI= npm run build 
       - name: Install ssh key
         uses: shimataro/ssh-key-action@v2
