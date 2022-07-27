@@ -63,11 +63,6 @@ export default function Testnet() {
               sitekey={process.env.REACT_APP_SITE_KEY}
               onChange={handleChange}
             />
-            <ReCAPTCHA
-              className="mt-6 flex justify-center"
-              sitekey={process.env.REACT_APP_API}
-              onChange={handleChange}
-            />
 
             <button
               disabled={!isVerified}
@@ -90,7 +85,7 @@ export default function Testnet() {
               no monetary value, and cannot be exchanged for cash, cash
               equivalent, or other tokens or cryptocurrencies.
             </p>
-            <h1 className="text-xl mt-4 font-bold">tSEL Status</h1>
+            {/* <h1 className="text-xl mt-4 font-bold">tSEL Status</h1>
             <div className="leading-9">
               <p>
                 <strong className="text-[#03A9F4]">94,031,932.9602 tSEL</strong>{' '}
@@ -108,7 +103,7 @@ export default function Testnet() {
               <p>
                 Currently at block <strong>12654033</strong>
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
