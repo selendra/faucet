@@ -1,34 +1,34 @@
-import { useState } from 'react'
-import ReCAPTCHA from 'react-google-recaptcha'
-import giving from '../assets/giving.svg'
-import { InformationCircleIcon, UploadIcon } from '@heroicons/react/outline'
-import toast from 'react-hot-toast';
+import React, { useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
+import toast, { Toaster } from 'react-hot-toast';
+// import toast from 'react-hot-toast';
+import logo from '../assets/selendra.png';
 
 export default function Testnet() {
   const [address, setAddress] = useState('');
   const [isVerified, setIsVerified] = useState(false);
-  
+
   const handleChange = (value) => {
     // if value is null recaptcha expired
-    if (value !== null) { 
-      setIsVerified(true)
+    if (value !== null) {
+      setIsVerified(true);
     } else {
-      setIsVerified(false)
+      setIsVerified(false);
     }
   };
 
-  const handleSubmit = async() => {
+  const handleSubmit = async () => {
     try {
-      if(!address) return toast.error('invalid address!');
-  
+      if (!address) return toast.error('invalid address!');
+
       const res = await fetch(`${process.env.REACT_APP_API}/claim/testnet`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', },
-        body: JSON.stringify({ address: address })
-      })
-  
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ address: address }),
+      });
+
       const data = await res.json();
-      if(res.ok) {
+      if (res.ok) {
         toast.success(data.data);
       } else {
         toast.error(data.data);
@@ -37,43 +37,81 @@ export default function Testnet() {
       toast.error('Something went wrong!');
       return;
     }
-  }
+  };
 
   return (
-    <div className='md:w-3/4 md:mx-auto mx-4 py-16'>
-      <div className='my-card shadow-md'>
-        {/* <img src={giving} alt='' className='fixed top-0 right-0' /> */}
-        <h3 className='font-bold text-2xl'>Get Testnet Tokens</h3>
-        <p className='font-light my-4 mr-[10%]'>This faucet transfers Testnet Token on Selendra testnets. Confirm details before submitting.</p>
-        
-        <label className='font-semibold text-sm'>Wallet Address:</label>
-        <input 
-          type="text" 
-          value={address} 
-          onChange={e => setAddress(e.target.value)} 
-          placeholder="Enter Address" 
-          className="input input-bordered w-full bg-white text-slate-700" 
-        />
-        <ReCAPTCHA
-          className='mt-6 flex justify-center'
-          sitekey={process.env.REACT_APP_SITE_KEY}
-          onChange={handleChange}
-        />
+    <>
+      <div className="background-img animate-pulse" />
+      <div className="home-page py-16 xl:py-8 ">
+        <div className="my-card flex xl:w-2/3  ">
+          <div className="shadow-md w-full py-20 xl:py-10 px-11 mx-auto">
+            <center>
+              <img src={logo} alt="selendra logo" width={180} />
+            </center>
+            <div className="pt-16">
+              <label className="font-semibold text-sm">Wallet Address:</label>
+              <input
+                type="text"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                placeholder="se ..."
+                className="w-full bg-white h-12 rounded-lg px-4 focus:ring-2 ring-selendra "
+              />
+            </div>
+            <ReCAPTCHA
+              className="mt-6 flex justify-center"
+              sitekey={process.env.REACT_APP_SITE_KEY}
+              onChange={handleChange}
+            />
+            <ReCAPTCHA
+              className="mt-6 flex justify-center"
+              sitekey={process.env.REACT_APP_API}
+              onChange={handleChange}
+            />
 
-        <button 
-          disabled={!isVerified} 
-          onClick={handleSubmit} 
-          class="btn btn-primary border-none w-full rounded-full bg-[#03A9F4] hover:bg-[#03A9F4] mt-6"
-        >
-          <UploadIcon className='h-5 w-5' />
-          Submit
-        </button>
-        
-        <div className='flex space-x-2 bg-[#023750] px-4 py-2 mt-4 rounded-lg'>
-          <InformationCircleIcon className='h-5 w-5 mt-1 text-[#03A9F4]' />
-          <p>You can request 5 testnet once per address every 24h.</p>
+            <button
+              disabled={!isVerified}
+              onClick={handleSubmit}
+              class="btn btn-primary border-none h-12 w-full py-2 px-22 text-white font-extrabold text-xl rounded-lg bg-[#03A9F4] hover:bg-[#03A9F4] mt-6"
+            >
+              <span> Give me tSEL (Selendra testnet)</span>
+            </button>
+          </div>
+
+          <div className="other-card w-full py-24 xl:py-10 px-11 mx-auto">
+            <h1 className="text-xl font-bold">TESTNET DISCLAIMER</h1>
+            <p className="pt-8 text-lg">
+              Tokens on the Selendra Testnet{' '}
+              <span className="text-[#ED1576] font-bold">
+                ("Selendra testnet"){' '}
+              </span>{' '}
+              do not equate to Selendra Mainnet tokens{' '}
+              <span className="text-[#03A9F4] font-bold"> ("SEL") </span> , have
+              no monetary value, and cannot be exchanged for cash, cash
+              equivalent, or other tokens or cryptocurrencies.
+            </p>
+            <h1 className="text-xl mt-4 font-bold">tSEL Status</h1>
+            <div className="leading-9">
+              <p>
+                <strong className="text-[#03A9F4]">94,031,932.9602 tSEL</strong>{' '}
+                available
+              </p>
+              <p>
+                <strong className="text-[#ED1576] font-bold">
+                  5.0000 tSEL
+                </strong>{' '}
+                daily limit per address
+              </p>
+              <p>
+                <strong>11</strong> recipients queued
+              </p>
+              <p>
+                Currently at block <strong>12654033</strong>
+              </p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  )
+    </>
+  );
 }
