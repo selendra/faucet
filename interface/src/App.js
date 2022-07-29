@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Header from './components/Header';
 import Testnet from './pages/testnet';
+import Mainnet from './pages/mainnet';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/testnet" />} />
         <Route path="/testnet" element={<Testnet />} />
+        <Route path="/mainnet" element={<Mainnet />} />
       </Routes>
     </BrowserRouter>
   );
