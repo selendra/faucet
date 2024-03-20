@@ -3,8 +3,6 @@ import { Toaster } from "react-hot-toast";
 import Header from "./components/Header";
 import Testnett from "./pages/testnet";
 import Testnet from "./pages/testnet";
-import Mainnet from "./pages/mainnet";
-import Mainnett from "./pages/mainnet";
 
 function App() {
   return (
@@ -28,9 +26,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/testnet" />} />
         <Route path="/testnet" element={<Testnet />} />
-        <Route path="/mainnet" element={<Mainnet />} />
-        {/* <Route path="/testnet1" element={<Testnett />} /> */}
-        {/* <Route path="/mainnet1" element={<Mainnett />} /> */}
       </Routes>
     </BrowserRouter>
   );

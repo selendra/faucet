@@ -1,30 +1,49 @@
-const { Keyring, WsProvider, ApiPromise } = require('@polkadot/api');
+const { Keyring, WsProvider, ApiPromise } = require("@polkadot/api");
+const { isEvmAddess } = require("./index");
+const ethers = require("ethers");
 
-async function SubmitTrx({testnet, destination}) {
+require("dotenv").config();
+
+async function SubmitTrx({ testnet, destination }) {
   try {
-    const ws = new WsProvider('wss://rpc-testnet.selendra.org');
-    const api = await ApiPromise.create({ provider: ws });
+    if (isEvmAddess(destination)) {
+      const provider = new ethers.providers.JsonRpcProvider(process.env.EVM_PROVIDER);
+      const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
 
-    const keyring = new Keyring({ 
-      type: 'sr25519',
-      ss58Format: 204
-    });
-    // paste mnemonic here
-    const accountTransfer = keyring.addFromMnemonic(process.env.SEED);
+      const tx = await wallet.sendTransaction({
+        to: destination,
+        value: ethers.utils.parseEther("5"),
+      });
+      return tx.hash;
 
-    const nonce = await api.rpc.system.accountNextIndex(accountTransfer.address);
+    } else {
+      const ws = new WsProvider(process.env.WS_PROVIDER);
+      const api = await ApiPromise.create({ provider: ws });
 
-    const decimals = api.registry.chainDecimals;
-    // console.log(decimals)
-    const _amount = testnet ? 5 : 0.01;
-    const amount = BigInt(_amount * Math.pow(10, decimals[0]));
+      const keyring = new Keyring({
+        type: "sr25519",
+        ss58Format: 204,
+      });
+      // paste mnemonic here
+      const accountTransfer = keyring.addFromMnemonic(process.env.MNEMONIC);
 
-    const transfer = await api.tx.balances
-      .transfer(destination, amount)
-      .signAndSend(accountTransfer, { nonce });
-    
-    return transfer;
+      const nonce = await api.rpc.system.accountNextIndex(
+        accountTransfer.address
+      );
+
+      const decimals = api.registry.chainDecimals;
+      // console.log(decimals)
+      const _amount = testnet ? 5 : 0.01;
+      const amount = BigInt(_amount * Math.pow(10, decimals[0]));
+
+      const transfer = await api.tx.balances
+        .transfer(destination, amount)
+        .signAndSend(accountTransfer, { nonce });
+
+      return transfer;
+    }
   } catch (error) {
+    console.log(`error ${error}`)
     return null;
   }
 }

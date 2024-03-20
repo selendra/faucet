@@ -1,4 +1,7 @@
-const { checkAddress } = require('@polkadot/util-crypto');
+// const { checkAddress } = require('@polkadot/util-crypto');
+const { decodeAddress, encodeAddress } = require('@polkadot/keyring');
+const { hexToU8a, isHex } = require('@polkadot/util');
+const { ethers } = require("ethers")
 
 exports.isLessThan24Hour = (date) => {
   const twentyFourHrInMs = 24 * 60 * 60 * 1000;
@@ -10,6 +13,20 @@ exports.isLessThan24Hour = (date) => {
 }
 
 exports.isValidSubstrateAddress = (address) => {
-  const value = checkAddress(address, 204);
-  return value[0];
+  try {
+    encodeAddress(
+      isHex(address)
+        ? hexToU8a(address)
+        : decodeAddress(address)
+    );
+
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+exports.isEvmAddess = (address) => {
+  const value = ethers.utils.isAddress(address)
+  return value;
 }
